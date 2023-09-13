@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-import rospy, sys, threading
+import rospy
+import sys
+import threading
 from geometry_msgs.msg import Twist
 
 class Turtlesim_task():
