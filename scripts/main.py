@@ -1,7 +1,21 @@
 #!/usr/bin/env python3
 
-import rospy, os, getpass, subprocess
+import rospy, os, getpass, subprocess, sys
 from geometry_msgs.msg import Twist
+
+import asyncio
+
+async def keyboard_event():
+    while True:
+        # user_input = await asyncio.to_thread(input, "Press 'q' to quit: ")
+        input_key = sys.stdin.read(1)
+        if input_key == "q":
+            print("終了します。")
+            sys.exit(0)
+            break
+        else:
+            print("他の処理を続行中...")
+
 
 class Turtlesim_task():
     def __init__(self):
@@ -24,13 +38,7 @@ if __name__=="__main__":
 
     rate = rospy.Rate(1)
 
-    user_name = os.getlogin()
-    keyboard_file_path = '/home/' + user_name + '/catkin_ws/src/turtlesim_task/scripts/keyboard_event.py'
-
-    command = "sudo -S python3 " + keyboard_file_path
-    password = (getpass.getpass() + '\n').encode()
-    subprocess.run(command.split(), input=password)
-    
+    asyncio.run(keyboard_event())
     
     while not rospy.is_shutdown():
         turtlesim_task.publish()
